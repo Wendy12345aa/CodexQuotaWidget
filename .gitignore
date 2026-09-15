@@ -1,0 +1,19 @@
+# Build output
+/dist/
+/bin/
+/obj/
+
+# Visual Studio user and workspace files
+/.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Local runtime settings and logs
+settings.ini
+*.log
+
+# Windows metadata
+Thumbs.db
+Desktop.ini
