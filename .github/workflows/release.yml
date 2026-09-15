@@ -1,0 +1,38 @@
+name: Build and release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Build Windows executable
+        shell: powershell
+        run: .\build.ps1
+
+      - name: Create checksum
+        shell: powershell
+        run: |
+          $hash = (Get-FileHash "dist\CodexQuotaWidget.exe" -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$hash  CodexQuotaWidget.exe" | Set-Content "dist\SHA256SUMS.txt" -Encoding ascii
+
+      - name: Publish GitHub release
+        shell: powershell
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ github.ref_name }}" `
+            "dist\CodexQuotaWidget.exe" `
+            "dist\SHA256SUMS.txt" `
+            --title "Codex Quota Widget ${{ github.ref_name }}" `
+            --generate-notes

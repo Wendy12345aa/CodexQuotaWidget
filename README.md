@@ -1,56 +1,94 @@
 # Codex Quota Widget
 
-一个很小的 Windows Codex quota 浮窗：无边框、置顶、可拖动，显示 5-hour 与 weekly 剩余额度和重置倒计时。
+> A tiny always-on-top Windows widget for monitoring your Codex 5-hour and weekly quota — no API key required.
+
+[![Windows](https://img.shields.io/badge/platform-Windows-0078D4?logo=windows)](https://github.com/Wendy12345aa/CodexQuotaWidget/releases)
+[![MIT License](https://img.shields.io/badge/license-MIT-6ee7b7)](LICENSE)
+[![Latest Release](https://img.shields.io/github/v/release/Wendy12345aa/CodexQuotaWidget?label=download)](https://github.com/Wendy12345aa/CodexQuotaWidget/releases/latest)
 
 ![Codex Quota Widget preview](assets/codex-quota-widget.png)
 
-适用于 Windows 10/11，需要本机已有 Codex Desktop 或 Codex CLI，以及 .NET Framework 4.8（Windows 10/11 通常已包含）。
+[Download the latest Windows build](https://github.com/Wendy12345aa/CodexQuotaWidget/releases/latest/download/CodexQuotaWidget.exe)
 
-## 直接运行
+## Features
 
-1. 先确认 Codex Desktop 或 Codex CLI 已登录。
-2. 双击 `dist\CodexQuotaWidget.exe`。
-3. 拖动浮窗到喜欢的位置；位置会自动保存。
+- Shows the remaining 5-hour and weekly Codex quota
+- Displays a countdown to each reset
+- Refreshes automatically every 60 seconds
+- Borderless, slightly transparent, draggable, and always on top
+- Remembers its position and always-on-top preference
+- Native WinForms UI with no Electron, Node.js, or WebView
+- Uses your existing local Codex sign-in — no OpenAI API key required
 
-顶部的 `↻` 可立即刷新，`×` 退出。右键菜单还可复制当前 quota、切换置顶或退出。应用每 60 秒自动刷新。
+## Run
 
-## 数据与隐私
+1. Make sure Codex Desktop or Codex CLI is installed and signed in.
+2. Download `CodexQuotaWidget.exe` from the [latest release](https://github.com/Wendy12345aa/CodexQuotaWidget/releases/latest).
+3. Double-click the EXE and drag the widget wherever you want it.
 
-- 不需要 OpenAI API key。
-- 不读取、复制或保存登录凭证。
-- 应用启动本机已安装的 `codex app-server --stdio`，初始化后调用 `account/rateLimits/read`。
-- 只在本机内存中保留 quota 百分比与重置时间。
-- 只在 `%LOCALAPPDATA%\CodexQuotaWidget\settings.ini` 保存窗口位置与置顶选项。
+Use `↻` to refresh and `×` to quit. Right-click the widget to copy the current quota, toggle always-on-top, refresh, or exit.
 
-`account/rateLimits/read` 是随本机 Codex 版本提供的 app-server 协议。项目会在运行时探测；如果旧版本没有该方法，浮窗会提示更新 Codex。Codex 升级后若协议变化，也可能需要更新本项目。
+## How it works and privacy
 
-## 从源码构建
+- Starts the locally installed `codex app-server --stdio` process.
+- Reads quota through the local `account/rateLimits/read` method.
+- Does not read, copy, or store your login credentials.
+- Keeps quota percentages and reset times in memory only.
+- Saves only the window position and always-on-top preference in `%LOCALAPPDATA%\CodexQuotaWidget\settings.ini`.
 
-项目没有第三方依赖。Windows 自带的 .NET Framework 4.x 编译器即可构建：
+`account/rateLimits/read` is part of the app-server protocol shipped with the local Codex installation. The widget detects support at runtime. Because this is not a documented stable public API, a future Codex update may require a compatibility update to this project.
+
+## Requirements
+
+- Windows 10 or Windows 11
+- Codex Desktop or Codex CLI, signed in
+- .NET Framework 4.8, normally included with Windows 10/11
+
+## Build from source
+
+The project has no third-party runtime dependencies. Build it using the .NET Framework compiler included with Windows:
 
 ```powershell
 Set-ExecutionPolicy -Scope Process Bypass
 .\build.ps1
 ```
 
-输出文件为 `dist\CodexQuotaWidget.exe`。
+The output is written to `dist\CodexQuotaWidget.exe`. You can also open `CodexQuotaWidget.csproj` in Visual Studio and build the Release configuration.
 
-也可以用 Visual Studio 打开 `CodexQuotaWidget.csproj`，选择 Release 构建。
-
-## 测试 UI
-
-在没有 Codex 登录态的开发环境中，可以显示演示数据：
+To preview the UI without a Codex sign-in:
 
 ```powershell
 .\dist\CodexQuotaWidget.exe --demo
 ```
 
-## 常见提示
+## Troubleshooting
 
-- **Sign in to Codex first**：先打开 Codex Desktop/CLI 并完成登录，再点刷新。
-- **Codex not found**：确认 `codex.exe` 在 `PATH`，或已安装 Codex Desktop。
-- **Update Codex to view quota**：当前 Codex 版本没有此本地方法，请先升级 Codex。
+- **Sign in to Codex first** — open Codex Desktop or CLI, sign in, and refresh the widget.
+- **Codex not found** — make sure `codex.exe` is in `PATH`, or install Codex Desktop.
+- **Update Codex to view quota** — the installed Codex version does not provide the required local method.
 
-## 资源占用设计
+## 中文说明
 
-这是原生 WinForms 单进程 UI，除了随应用启动的 Codex app-server 子进程，没有 Electron、Node、WebView 或额外运行时。app-server 会保持连接，避免每分钟反复启动进程。
+这是一个小巧的 Windows Codex quota 浮窗：无边框、置顶、可拖动，显示 5-hour 与 weekly 剩余额度和重置倒计时。
+
+### 直接运行
+
+1. 确认 Codex Desktop 或 Codex CLI 已安装并登录。
+2. 从 [Latest Release](https://github.com/Wendy12345aa/CodexQuotaWidget/releases/latest) 下载 `CodexQuotaWidget.exe`。
+3. 双击运行，并把浮窗拖到喜欢的位置。
+
+顶部的 `↻` 可立即刷新，`×` 退出。右键菜单可以复制 quota、切换置顶、刷新或退出。应用每 60 秒自动刷新。
+
+### 数据与隐私
+
+- 不需要 OpenAI API key。
+- 不读取、复制或保存登录凭证。
+- 通过本机 `codex app-server --stdio` 的 `account/rateLimits/read` 读取 quota。
+- 只在内存中保留 quota 百分比与重置时间。
+- 只在 `%LOCALAPPDATA%\CodexQuotaWidget\settings.ini` 保存窗口位置与置顶选项。
+
+这个本地接口不是公开的稳定 API，未来 Codex 更新后可能需要同步更新兼容逻辑。
+
+## License
+
+[MIT](LICENSE)
