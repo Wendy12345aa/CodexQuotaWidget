@@ -2,6 +2,8 @@
 
 一个很小的 Windows Codex quota 浮窗：无边框、置顶、可拖动，显示 5-hour 与 weekly 剩余额度和重置倒计时。
 
+![Codex Quota Widget preview](assets/codex-quota-widget.png)
+
 适用于 Windows 10/11，需要本机已有 Codex Desktop 或 Codex CLI，以及 .NET Framework 4.8（Windows 10/11 通常已包含）。
 
 ## 直接运行
